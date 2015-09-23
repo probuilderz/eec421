@@ -14,3 +14,5 @@ As of 9/23/2015:
  
 New Challenge:
  - Be able to display the request through the Applet, not the console.
+ - Be able to print the time it take to reach destination, meaning solving the maze
+ - Show the final path in the text descriptive format. For example: Forward, Turn Left, Forward, Turn Right, Forward, Forward.
