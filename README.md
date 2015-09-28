@@ -25,3 +25,14 @@ Challenge on mazeme.java:
  - Be able to move the object inside the maze.
  - The object should be able to find another path when it reaches a wall.
  - The object should be able to reach destination.
+
+As of 9/27/2015
+Change made on mazeme.java:
+ - Implementation of the solveMaze() function
+ - The areas visited are marked by 0.
+ - The paths found are carry along with '@'
+ - The maze is solved when the object reaches the bottom corner.
+
+Additionnal requirement:
+ - The App should not exit without asking to the user if s/he is willing to play again.
+ - The App should give as result the number of iteration it takes to solve the maze
