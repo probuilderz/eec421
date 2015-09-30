@@ -36,3 +36,6 @@ Change made on mazeme.java:
 Additionnal requirement:
  - The App should not exit without asking to the user if s/he is willing to play again.
  - The App should give as result the number of iteration it takes to solve the maze
+
+Challenge on mazeme.java:
+ - Improve the tearwall() function, for better generation of the Maze
