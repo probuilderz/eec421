@@ -8,6 +8,8 @@ public class mazeme {
 	private int rows;
 	private int col;
 	private char[][] maze;
+	private int count;
+	private static int count1 = 0;
 	/*
 	 * Constructors and functions
 	 */
@@ -63,48 +65,122 @@ public class mazeme {
 	 */
 	public void prn1 (int[] m,int[] n,  int r){
 		for(int i = 0; i< r; i++){
-			//			System.out.println();
+			
 			System.out.print(" "+m[i]);
 		}
 		System.out.println();
 		for(int i = 0; i< r; i++){
-			//			System.out.println();
+			
 			System.out.print(" "+n[i]);
 		}
 		System.out.println();
 	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//	char[][] maze; // = new char[rows][col];
-		int rows;
-		int col;
-
-		mazeme mazeObject = new mazeme();
+		
+		//mazeme Obj_maze = new mazeme();
 		Scanner scan = new Scanner(System.in);
-		
+
 		System.out.print("Do you want to play (y) or (n): ");
-		   String keep = scan.next().toLowerCase();
-		  
-		   boolean ans = false;
-		   if (keep.equals("y")|| keep.equals("Y")){
-			   ans = true;
-		   }else{
-			   ans = false;
-			   System.exit(0);
-		   }
-		
+		String keep = scan.next().toLowerCase();
+
+		boolean ans = false;
+		if (keep.equals("y")|| keep.equals("Y")){
+			ans = true;
+		}else{
+			ans = false;
+			System.exit(0);
+		}
+
 		System.out.print("enter maze size L x L :");
 		int r = scan.nextInt();
-		//System.out.print("\n enter number of col:");
-		//int c = scan.nextInt();
-
+		
 		if(r % 2 == 0){
 			r++;
 		}
 		int c = r;
+
+		char[][] maze = new char[r][c];
+		while(ans){
+			maze = makeMaze(r,c);
+
+			solveMaze(1,1,maze);
+			
+			System.out.println("It takes iterations to solve the maze "+ count1);
+			System.out.print("Do you want to play again (y) or (n): ");
+			keep = scan.next().toLowerCase();
+
+			if (keep.equals("y")|| keep.equals("Y")){
+				ans = true;
+				System.out.print("enter maze size L x L :");
+				r = scan.nextInt();
+				
+				if(r % 2 == 0){
+					r++;
+				}
+				c = r;
+
+			}else{
+				ans = false;
+				System.exit(0);
+			}
+		}
+
+	}
+
+	private static void tearDown(int row, int col, char[][] m) {
+		mazeme mazeObject1 = new mazeme(m.length,m.length);
+		char[][] maze1 = new char[m.length][m.length];
+		maze1 = m;
+
+		if (row % 2 == 1 && maze1[row][col-1] != maze1[row][col+1]) {
+			// row is odd; wall separates rooms horizontally
+			fill(row, col-1,mazeObject1.getMaze(), maze1[row][col-1], maze1[row][col+1]);
+			maze1[row][col] = maze1[row][col+1];
+			mazeObject1.setMaze(maze1);
+			putSquare(row,col,mazeObject1.getMaze(),'c');
+		}
+		else if (row % 2 == 0 && maze1[row-1][col] != maze1[row+1][col]) {
+			// row is even; wall separates rooms vertically
+			fill(row-1, col,mazeObject1.getMaze(), maze1[row-1][col], maze1[row+1][col]);
+			maze1[row][col] = maze1[row+1][col];
+			mazeObject1.setMaze(maze1);
+			putSquare(row,col,mazeObject1.getMaze(),'c');		
+		}
+
+	}
+
+	private static void putSquare(int row, int col,char[][] m, char c) {
+		
+		char[][]maze= m;
+		mazeme mazeObject1 = new mazeme(m.length, m.length);
+		maze[row][col] = c;
+		mazeObject1.setMaze(maze);
+
+	}
+
+	private static void fill(int row, int col, char[][] m,char replace, char replaceWith) {
+		
+		char[][]maze = m;
+		mazeme mazeObject2 = new mazeme(m.length, m.length);
+
+		if (maze[row][col] ==replace) {
+			maze[row][col] = replaceWith;
+			mazeObject2.setMaze(maze);
+			fill(row+1,col,m,replace,replaceWith);
+			fill(row-1,col,m,replace,replaceWith);
+			fill(row,col+1,m,replace,replaceWith);
+			fill(row,col-1,m,replace,replaceWith);
+		}
+
+	}
+
+	private static char[][] makeMaze(int r, int c){
+		mazeme mazeObject = new mazeme();
+
 		mazeObject.setRows(r);
 		mazeObject.setCol(c);
-		//col = c;
+		
 		char empty= 30;
 		/*Create a square maze where everything is wall */
 		int i=0,j=0;
@@ -139,30 +215,19 @@ public class mazeme {
 		mazeObject.prn1(wallrow, wallcol, wallCt);   // this display the walls position in the grid. 
 
 		mazeObject.setMaze(mazet);
-		//mazeObject.prn(mazeObject.getMaze());
+		
 		/* Create randoms wall*/
 		int rt =0;
 		for (int k=wallCt-1; k>0; k--) {
 			rt = (int)(Math.random() * k);  // choose a wall randomly and maybe tear it down
-			//            if (checkStatus() == TERMINATE)
-			//               return;
+			
 			tearDown(wallrow[rt],wallcol[rt],mazeObject.getMaze());
-			//			System.out.println("---");
-			//			System.out.println(rt);
-			//			System.out.println("---");
-			//			System.out.println("---");
-			//			System.out.println(wallrow[rt]);
-			//			System.out.println("---");
 			wallrow[rt] = wallrow[k];
 			wallcol[rt] = wallcol[k];
-
-			//			mazeObject.prn1(wallrow, wallcol, wallCt);
-
-			//			mazeObject.prn(mazeObject.getMaze());
 		}
-		
+
 		mazet = mazeObject.getMaze();
-		
+
 		// Replace all remaining characters that are not walls
 		for(i =1; i<mazeObject.getRows()-1; i++)
 			for(j =1; j<mazeObject.getRows()-1; j++){
@@ -171,70 +236,7 @@ public class mazeme {
 			}
 		mazet[1][0] = '@';                 // position of the object
 		mazeObject.setMaze(mazet);
-
-
-		solveMaze(1,1,mazet);
-		
-		
-		//mazeObject.prn(mazeObject.getMaze());
-
-
-	}
-
-	private static void tearDown(int row, int col, char[][] m) {
-		mazeme mazeObject1 = new mazeme(m.length,m.length);
-		char[][] maze1 = new char[m.length][m.length];
-		maze1 = m;
-		//maze1 = mazeObject1.getMaze();
-		//System.out.println("---");
-		//mazeObject1.prn(maze1);
-		// TODO Auto-generated method stub
-		if (row % 2 == 1 && maze1[row][col-1] != maze1[row][col+1]) {
-			// row is odd; wall separates rooms horizontally
-			fill(row, col-1,mazeObject1.getMaze(), maze1[row][col-1], maze1[row][col+1]);
-			maze1[row][col] = maze1[row][col+1];
-			mazeObject1.setMaze(maze1);
-			putSquare(row,col,mazeObject1.getMaze(),'c');
-			//     try { wait(speedSleep); }
-			//     catch (InterruptedException e) { }
-		}
-		else if (row % 2 == 0 && maze1[row-1][col] != maze1[row+1][col]) {
-			// row is even; wall separates rooms vertically
-			fill(row-1, col,mazeObject1.getMaze(), maze1[row-1][col], maze1[row+1][col]);
-			maze1[row][col] = maze1[row+1][col];
-			mazeObject1.setMaze(maze1);
-			putSquare(row,col,mazeObject1.getMaze(),'c');
-			//     try { wait(speedSleep); }
-			//     catch (InterruptedException e) { }
-		}
-
-	}
-
-	private static void putSquare(int row, int col,char[][] m, char c) {
-		// TODO Auto-generated method stub
-		char[][]maze= m;
-		mazeme mazeObject1 = new mazeme(m.length, m.length);
-		//maze = mazeObject1.getMaze();
-		maze[row][col] = c;
-		mazeObject1.setMaze(maze);
-		//mazeObject1.prn(mazeObject1.getMaze());
-
-	}
-
-	private static void fill(int row, int col, char[][] m,char replace, char replaceWith) {
-		// TODO Auto-generated method stub
-		char[][]maze = m;
-		mazeme mazeObject2 = new mazeme(m.length, m.length);
-		//maze = mazeObject2.getMaze();
-
-		if (maze[row][col] ==replace) {
-			maze[row][col] = replaceWith;
-			mazeObject2.setMaze(maze);
-			fill(row+1,col,m,replace,replaceWith);
-			fill(row-1,col,m,replace,replaceWith);
-			fill(row,col+1,m,replace,replaceWith);
-			fill(row,col-1,m,replace,replaceWith);
-		}
+		return mazeObject.getMaze();
 
 	}
 
@@ -244,15 +246,15 @@ public class mazeme {
 		// considered to be solved if the path reaches the lower right cell.
 		char[][] maze = m;
 		mazeme mazeObject2 = new mazeme(m.length, m.length);
-//		Thread mazeThread;   // thread for creating and solving maze
+	
 		int speedSleep = 50;
+		
 
 		if (maze[row][col] == ' ') {
 			maze[row][col] = '@';      // add this cell to the path
-			//      if (checkStatus() == TERMINATE)
-			//         return false;
 			putSquare(row,col,m,'@');
 			mazeObject2.setMaze(m);
+			count1++;
 			mazeObject2.prn(mazeObject2.getMaze());
 			if (row == mazeObject2.getRows()-2 && col == mazeObject2.getCol()-2)
 				return true;  // path has reached goal
@@ -263,35 +265,19 @@ public class mazeme {
 					(solveMaze(row+1,col,m))  ||
 					solveMaze(row,col+1,m) )
 				return true;
-			//      if (checkStatus() == TERMINATE)
-			//         return false;
-			// maze can't be solved from this cell, so backtract out of the cell
+			// maze can't be solved from this cell, so backtrack out of the cell
 			maze[row][col] = '0';   // mark cell as having been visited
 			putSquare(row,col,m,'0');
-			
-			//      synchronized(this) {
-			//        try { wait(speedSleep); }
-			//        catch (InterruptedException e) { }
-			//      }
+			count1++;
+
 			try {
 				Thread.sleep(speedSleep);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//      if (checkStatus() == TERMINATE)
-			//         return false;
 		}
-		
+
 		return false;
 	}
-
-
-
-
-
-
-
 
 }
