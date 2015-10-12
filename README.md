@@ -40,6 +40,7 @@ Additionnal requirement:
 Challenge on mazeme.java:
  - Improve the tearwall() function, for better generation of the Maze
  
+As of 10/12/2015
 New Software specification for mazeme.java: Update mazeme.java to version 2.0
  - The application is called GMaze for Generator Maze
  - The application will no longer reach for a specifique target or final destination
@@ -47,3 +48,8 @@ New Software specification for mazeme.java: Update mazeme.java to version 2.0
  - The application will provide statistics of number of intruders found and deleted.
  - the application will also inform the user about intruders that were not delete.
  - The GMaze will act like an antivirus with objectif to clean the system.
+
+Challenge on mazeme.java:
+ - Introduce a system of timing to stop the Runner as soon as no intruders remain.
+ - This will prevent the Runner to waste time searching for possible intruders.
+ - This will increase efficiency and quick feedback.
