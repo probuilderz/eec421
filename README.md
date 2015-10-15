@@ -53,3 +53,7 @@ Challenge on mazeme.java:
  - Introduce a system of timing to stop the Runner as soon as there is no intruder left.
  - This will prevent the Runner to waste time searching for possible intruders.
  - This will increase efficiency and quick feedback.
+
+New update: of mazeme.java 10/15/2015
+ - No need to put a timer to stop the VRunner.
+ - Issue resolved by comparing the number of 'hit' and the number of intruders.
