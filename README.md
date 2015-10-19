@@ -57,3 +57,7 @@ Challenge on mazeme.java:
 New update: of mazeme.java 10/15/2015
  - No need to put a timer to stop the VRunner.
  - Issue resolved by comparing the number of 'hit' and the number of intruders.
+ - A 'hit' is when the VRunner catches and erases an intruder.
+
+As of 10/19/2015 The Final implementation can be seen in probuildzer/MazeRunner.
+...waiting for more specification.
